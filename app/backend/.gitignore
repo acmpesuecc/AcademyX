@@ -1,0 +1,10 @@
+# Python
+*.pyc
+**/__pycache__/
+*.py[cod]
+
+# Poetry
+/.venv
+
+# Other
+.DS_Store
