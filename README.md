@@ -1,7 +1,6 @@
 # AcademyX
 
-## Team Lead
-[Achyuth Yogesh Sosale](https://github.com/achyuthcodes30)
+## Team Lead - [Achyuth Yogesh Sosale](https://github.com/achyuthcodes30)
 
 
 This project is part of the ACM Industrial Experience Program 2024, which aims to simulate the real-world industrial process to develop and ship code.
