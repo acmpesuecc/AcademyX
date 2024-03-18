@@ -8,3 +8,6 @@
 
 # Other
 .DS_Store
+.env
+**/.mypy_cache
+**/test.db

@@ -1,7 +1,38 @@
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator, TypedDict
+
 import uvicorn
 from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy.orm import close_all_sessions
+from sqlmodel.ext.asyncio.session import AsyncSession
 
-app = FastAPI()
+from backend import settings
+from backend.database.session import async_session, create_db
+
+
+class AppState(TypedDict):
+    _db: async_sessionmaker[AsyncSession]
+    
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[AppState, None]:
+    try:
+     await create_db()
+     print("Table created")
+     appstate = AppState(_db=async_session)
+     yield appstate
+     print(appstate)
+    except Exception as e:
+        print(e)
+    finally:
+      print(AppState)  
+      close_all_sessions()
+    
+
+app = FastAPI(title= settings.app_name, version= settings.version,lifespan=lifespan)
+
+
 
 @app.get("/")
 async def read_root() -> dict[str, str]:
