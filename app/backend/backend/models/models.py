@@ -24,14 +24,15 @@ class User(SQLModel, table = True):
     username: str = Field(index = True)
     avatar_name: Optional[str] = Field(default = None)
     email: str = Field(index = True)
-    """purchased_courses: Optional[List["Course"]] =  Relationship(
+    purchased_courses: Optional[List["Course"]] =  Relationship(
         back_populates="subscribers"
-        )"""
+        )
+    isTeacher: bool = Field(default=False)    
+    courses_uploaded: Optional[List["Course"]] = Relationship(back_populates="teacher")
+        
     joined_at: Optional[datetime] = Field(default_factory=datetime.now)
     last_seen: Optional[datetime] = Field(default_factory=datetime.now)
 
-class Teacher(User, table = True):
-    courses: Optional[List["Course"]] = Relationship(back_populates="teacher")
 
 class Course(iDModel, table = True):
     title: str = Field(index=True)
@@ -42,10 +43,10 @@ class Course(iDModel, table = True):
     avg_rating: Optional[float] = Field(default=0)
     published: bool = Field(default=False)
     modules: Optional[List["Module"]] = Relationship(back_populates="course")
-    """subscribers: Optional[List[User]] = Relationship(
+    subscribers: Optional[List[User]] = Relationship(
         back_populates="purchased_courses"
-        )  """  
-    teacher: Optional[Teacher] = Relationship(back_populates="courses")
+        )
+    teacher: Optional[User] = Relationship(back_populates="courses_uploaded")
    
 
 class Module(iDModel, table = True):
@@ -65,12 +66,12 @@ class Video(iDModel, table = True):
     title: str = Field(index=True)
     url: str = Field(index = True)
     lesson: Optional[Lesson] = Relationship(back_populates="video")
-    length_minutes: int
+    length_minutes: Optional[int] = Field(default = None)
     
 class Article(iDModel, table = True):
     title: str = Field(index=True)
     url: str = Field(index = True)
-    length_words: int 
+    length_words: Optional[int] = Field(default=None) 
     lesson: Optional[Lesson] = Relationship(back_populates="article")
     
 class Review(iDModel, table = True):

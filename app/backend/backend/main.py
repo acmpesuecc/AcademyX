@@ -2,13 +2,13 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator, TypedDict
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI,Depends
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.orm import close_all_sessions
 from sqlmodel.ext.asyncio.session import AsyncSession
-
+from backend.routes.uploadroutes import router as uploads_router
 from backend import settings
-from backend.database.session import async_session, create_db
+from backend.database.session import get_async_session,async_session, create_db
 
 
 class AppState(TypedDict):
@@ -19,19 +19,21 @@ class AppState(TypedDict):
 async def lifespan(app: FastAPI) -> AsyncGenerator[AppState, None]:
     try:
      await create_db()
-     print("Table created")
+     
      appstate = AppState(_db=async_session)
      yield appstate
-     print(appstate)
-    except Exception as e:
-        print(e)
+    except Exception:
+        print("There is an error!")
     finally:
-      print(AppState)  
       close_all_sessions()
-    
 
-app = FastAPI(title= settings.app_name, version= settings.version,lifespan=lifespan)
+app = FastAPI(
+    title= settings.app_name, 
+    version= settings.version,
+    lifespan=lifespan)
 
+
+app.include_router(uploads_router, prefix="/api/v1", dependencies=[Depends(get_async_session)])
 
 
 @app.get("/")
