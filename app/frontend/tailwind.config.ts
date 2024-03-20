@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        'academy': '#6741d9', //purple font for logo and other things
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
