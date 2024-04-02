@@ -19,3 +19,9 @@ class LessonUploadRequest(BaseModel):
     article_url: str
     video_title: str
     article_title: str
+
+class ReviewUploadRequest(BaseModel):
+    user: str
+    course: str
+    rating: float
+    comment: str
