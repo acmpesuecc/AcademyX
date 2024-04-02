@@ -21,7 +21,7 @@ class LessonUploadRequest(BaseModel):
     article_title: str
 
 class ReviewUploadRequest(BaseModel):
-    username: str
+    user: str
     course: str
     rating: float
     comment: str
